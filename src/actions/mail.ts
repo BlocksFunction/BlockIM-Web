@@ -1,7 +1,7 @@
 "use server";
 import nodemailer from "nodemailer";
 
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, NEXT_PUBLIC_EMAIL_TO } =
+const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, NEXT_PUBLIC_EMAIL_FROM } =
 	process.env;
 
 export async function sendMail({
@@ -25,7 +25,7 @@ export async function sendMail({
 
 	try {
 		await transporter.sendMail({
-			from: NEXT_PUBLIC_EMAIL_TO,
+			from: NEXT_PUBLIC_EMAIL_FROM,
 			to,
 			subject,
 			html,

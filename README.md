@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 开始使用
 
-## Getting Started
-
-First, run the development server:
+首先，运行开发服务器：
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+在浏览器中打开 [http://localhost:3000](http://localhost:3000) 查看效果。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+你可以通过修改 `app/page.tsx` 文件来编辑页面内容，页面会随着文件的修改自动更新。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+该项目使用 [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) 自动优化并加载 [Geist](https://vercel.com/font) 字体，这是一种为 Vercel 设计的新字体系列。
 
-## Learn More
+## 环境变量配置
 
-To learn more about Next.js, take a look at the following resources:
+在项目根目录下创建一个名为 `.env.local` 的文件，并添加以下内容：
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```plaintext
+SMTP_HOST=<SMTP服务器地址>
+SMTP_PORT=<SMTP服务器端口>
+SMTP_USER=<你的邮箱地址>
+SMTP_PASS=<你的邮箱授权码>
+NEXT_PUBLIC_EMAIL_FROM=<你的邮箱地址>
+NEXT_PUBLIC_API_URL=<后端部署地址>
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**注意事项：**
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* 请确保 `.env.local` 文件没有被包含在版本控制系统中（如 Git），以避免泄露敏感信息。
