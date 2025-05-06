@@ -1,8 +1,8 @@
 "use client";
-import { sendMail } from '@/actions/mail';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { sendMail } from "@/actions/mail";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface FormValues {
 	email: string;

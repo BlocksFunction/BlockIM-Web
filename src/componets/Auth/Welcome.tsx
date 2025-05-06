@@ -1,3 +1,5 @@
+export const experimental_ppr = true;
+
 export default function Welcome() {
 	return (
 		<div className="hidden md:block w-1/2 p-12 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">

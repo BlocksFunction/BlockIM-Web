@@ -1,10 +1,11 @@
 "use client";
-import { setUserInfo } from '@/actions/user-info';
-import useTheme from '@/store/useTheme';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { toast } from 'sonner';
+import { setUserInfo } from "@/actions/user-info";
+import useTheme from "@/store/useTheme";
+import axios from "axios";
+import Form from "next/form";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 interface FormValues {
 	input: string;
@@ -62,9 +63,10 @@ export default function LoginForm() {
 	}
 
 	return (
-		<form
+		<Form
 			onSubmit={(event) => event.preventDefault()}
 			className="space-y-6"
+			action={""}
 		>
 			<div>
 				<label
@@ -142,6 +144,6 @@ export default function LoginForm() {
 			>
 				{formValues.isSubmitting ? "登录中..." : "登录"}
 			</button>
-		</form>
+		</Form>
 	);
 }

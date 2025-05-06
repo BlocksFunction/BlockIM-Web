@@ -1,5 +1,5 @@
-import { getUserInfo } from '@/actions/user-info';
-import SwitchTheme from '@/componets/SwitchTheme';
+import { getUserInfo } from "@/actions/user-info";
+import SwitchTheme from "@/componets/SwitchTheme";
 import {
 	File,
 	Image,
@@ -14,8 +14,8 @@ import {
 	UserPlus,
 	Users,
 	Video,
-} from 'lucide-react';
-import { redirect } from 'next/navigation';
+} from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function ChatPage() {
 	const userInfo = await getUserInfo();
@@ -178,37 +178,43 @@ export default async function ChatPage() {
 					</div>
 				</main>
 
-				<aside className="w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700">
-					<div className="p-4 border-b border-gray-200 dark:border-gray-700">
-						<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-							动态
-						</h2>
-					</div>
-					<div className="p-2 overflow-y-auto space-y-4">
-						{posts.map((post) => (
-							<div
-								key={post.id}
-								className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
-							>
-								<div className="flex items-center mb-2">
-									<div className="w-8 h-8 bg-blue-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-										<User
-											className="text-blue-500 dark:text-blue-400"
-											size={16}
-										/>
+				<aside className="w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 h-full">
+					<div className={"h-1/3"}>
+						<div className="p-4 border-b border-gray-200 dark:border-gray-700">
+							<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+								公告
+							</h2>
+						</div>
+						<div className="p-2 overflow-y-auto space-y-4">
+							{posts.map((post) => (
+								<div
+									key={post.id}
+									className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg"
+								>
+									<div className="flex items-center mb-2">
+										<div className="w-8 h-8 bg-blue-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+											<User
+												className="text-blue-500 dark:text-blue-400"
+												size={16}
+											/>
+										</div>
+										<span className="ml-2 font-medium text-gray-700 dark:text-gray-300">
+											{post.author}
+										</span>
 									</div>
-									<span className="ml-2 font-medium text-gray-700 dark:text-gray-300">
-										{post.author}
-									</span>
+									<p className="text-sm text-gray-600 dark:text-gray-400">
+										{post.content}
+									</p>
 								</div>
-								<p className="text-sm text-gray-600 dark:text-gray-400">
-									{post.content}
-								</p>
-								<div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
-									<span>{post.likes}人 点赞了</span>
-								</div>
-							</div>
-						))}
+							))}
+						</div>
+					</div>
+					<div>
+						<div className="p-4 border-b border-gray-200 dark:border-gray-700">
+							<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+								成员
+							</h2>
+						</div>
 					</div>
 				</aside>
 			</div>

@@ -1,9 +1,9 @@
 "use client";
-import { setUserInfo } from '@/actions/user-info';
-import axios from 'axios';
-import { redirect } from 'next/navigation';
-import React, { useState } from 'react';
-import { toast } from 'sonner';
+import { setUserInfo } from "@/actions/user-info";
+import axios from "axios";
+import { redirect } from "next/navigation";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 interface FormValues {
 	username: string;

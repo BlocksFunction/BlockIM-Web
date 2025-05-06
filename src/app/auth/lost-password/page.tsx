@@ -1,6 +1,6 @@
-import LostPasswordForm from '@/componets/Auth/LostPasswordForm';
-import Welcome from '@/componets/Auth/Welcome';
-import SwitchTheme from '@/componets/SwitchTheme';
+import LostPasswordForm from "@/componets/Auth/LostPasswordForm";
+import Welcome from "@/componets/Auth/Welcome";
+import SwitchTheme from "@/componets/SwitchTheme";
 
 export default async function LostPasswordPage() {
 	return (
