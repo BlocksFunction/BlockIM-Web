@@ -137,3 +137,6 @@ dist
 
 # bun
 bun.lock
+
+# WebStorm
+.idea/*
