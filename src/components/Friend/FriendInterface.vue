@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
 	ChevronDown,
 	ChevronRight,
@@ -6,9 +6,7 @@ import {
 	Search,
 	UserPlus,
 } from "lucide-vue-next";
-import { computed, ref } from "vue";
-
-const props = defineProps({});
+import { computed, ref, shallowRef } from "vue";
 
 const activeTab = ref("friends");
 const activePage = ref("");
@@ -19,7 +17,7 @@ const tabs = ref([
 	{ id: "groups", label: "群聊" },
 ]);
 
-const friendGroups = ref([
+const friendGroups = shallowRef([
 	{
 		id: "default",
 		name: "默认分组",
@@ -64,7 +62,7 @@ const friendGroups = ref([
 	},
 ]);
 
-const groupCategories = ref([
+const groupCategories = shallowRef([
 	{
 		id: "work",
 		name: "工作群组",
@@ -102,28 +100,90 @@ const groupCategories = ref([
 	},
 ]);
 
+const friendRequests = shallowRef([
+	{
+		id: 1,
+		from: {
+			id: 101,
+			name: "张三",
+			avatar: "张",
+			online: true,
+		},
+		message: "我们一起工作吧",
+		time: new Date(Date.now() - 3600000),
+		status: "pending",
+	},
+	{
+		id: 2,
+		from: {
+			id: 102,
+			name: "李四",
+			avatar: "李",
+			online: false,
+		},
+		message: "",
+		time: new Date(Date.now() - 86400000),
+		status: "pending",
+	},
+]);
+
+const friendRequestsMap = new Map(friendRequests.value.map(r => [r.id, r]));
+
+const formatTime = /*#__PURE__*/ (date) => {
+	const now = new Date();
+	const diff = now - date;
+
+	if (diff < 60000) return "刚刚";
+	if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
+	if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
+	return `${Math.floor(diff / 86400000)}天前`;
+};
+
+const handleRequest = (id: number, action: string) => {
+	const index = friendRequestsMap.get(id);
+
+	if (index) {
+		let updateRequests = [...friendRequests.value];
+		const updateFriendGroups = [...friendGroups.value];
+
+		if (action == "accept") {
+			updateFriendGroups[0].items.push({
+				id: index.from.id,
+				name: index.from.name,
+				avatar: index.from.avatar,
+				online: index.from.online,
+				status: index.from.online ? "在线" : "离线",
+			});
+		}
+		updateRequests = updateRequests.filter(item => item !== index);
+
+		friendRequests.value = updateRequests;
+		friendGroups.value = updateFriendGroups;
+	}
+};
+
 const filteredFriendGroups = computed(() => {
 	const query = searchQuery.value.toLowerCase();
-	return friendGroups.value
-		.map((group) => ({
-			...group,
-			items: group.items.filter((friend) =>
-				friend.name.toLowerCase().includes(query)
-			),
-		}))
-		?.filter((group) => group.items.length > 0);
+	if (!query) return friendGroups.value;
+
+	return friendGroups.value.reduce((acc, groups) => {
+		const filtered = groups.items.filter(friend =>
+			friend.name.toLowerCase().includes(query)
+		);
+		return filtered.length ? [...acc, { ...groups, items: filtered }] : acc;
+	}, []);
 });
 
 const filteredGroupCategories = computed(() => {
 	const query = searchQuery.value.toLowerCase();
-	return groupCategories.value
-		.map((category) => ({
-			...category,
-			items: category.items.filter((group) =>
-				group.name.toLowerCase().includes(query)
-			),
-		}))
-		.filter((category) => category.items.length > 0);
+	if (!query) return groupCategories.value;
+
+	return groupCategories.value.reduce((acc, groups) => {
+		const filtered = groups.items.filter(group => {
+			group.name.toLowerCase().includes(query);
+		});
+		return filtered.length ? [...acc, { ...groups, items: filtered }] : acc;
+	}, []);
 });
 
 const toggleGroup = (groupId) => {
@@ -160,7 +220,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 					class="flex-1 bg-transparent focus:outline-none text-sm dark:text-gray-200"
 				/>
 				<button class="cursor-pointer w-auth flex items-center justify-center space-x-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
-					<UserPlus class="w-5 h-5" />
+					<UserPlus class="w-5 h-5" v-once />
 				</button>
 			</div>
 		</div>
@@ -170,8 +230,9 @@ const truncateText = (text, length, useEllipsis = true) => {
 				<button
 					@click="activePage = 'pending'"
 					class="cursor-pointer text-blue-500 flex p-4 text-sm font-medium transition-colors justify-between w-full"
+					v-once
 				>
-					<span>好友信息</span>
+					<span class="text-black">好友信息</span>
 					<ChevronRight />
 				</button>
 			</div>
@@ -395,5 +456,122 @@ const truncateText = (text, length, useEllipsis = true) => {
 				</button>
 			</div>
 		</div>
+	</div>
+	<div class="w-full">
+		<template v-if="activePage == 'pending'">
+			<div class="h-full flex flex-col bg-white dark:bg-gray-800">
+				<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+					<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+						好友申请
+					</h2>
+				</div>
+
+				<div class="flex-1 overflow-y-auto">
+					<div
+						v-if="friendRequests.length === 0"
+						class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400"
+					>
+						<UserPlus class="w-12 h-12 mb-4 opacity-50" />
+						<p>暂无好友申请</p>
+					</div>
+
+					<div
+						v-else
+						class="divide-y divide-gray-200 dark:divide-gray-700"
+					>
+						<div
+							v-for="request in friendRequests"
+							:key="request.id"
+							class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+						>
+							<div class="flex items-start">
+								<div class="relative mr-3 flex-shrink-0">
+									<div class="w-12 h-12 bg-blue-100 dark:bg-gray-600 rounded-full flex items-center justify-center">
+										<span
+											class="text-lg font-medium text-gray-600 dark:text-gray-300"
+										>
+											{{
+												request
+												.from
+												.avatar
+											}}
+										</span>
+									</div>
+									<div
+										v-if="
+											request
+											.from
+											.online
+										"
+										class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"
+									/>
+								</div>
+
+								<div class="flex-1 min-w-0 flex flex-col">
+									<div class="flex items-center justify-between w-full">
+										<h3 class="font-medium text-gray-800 dark:text-gray-200 truncate">
+											{{
+												request
+												.from
+												.name
+											}}
+										</h3>
+										<span
+											class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2"
+										>
+											{{
+												formatTime(
+													request
+														.time,
+												)
+											}}
+										</span>
+									</div>
+
+									<p class="text-sm text-gray-600 dark:text-gray-300 mt-1 break-words">
+										{{
+											request
+											.message
+											|| "请求添加你为好友"
+										}}
+									</p>
+
+									<div class="flex justify-end space-x-2 mt-3">
+										<button
+											@click="
+												handleRequest(
+													request
+														.id,
+													'accept',
+												)
+											"
+											class="cursor-pointer px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm transition-colors w-20"
+										>
+											接受
+										</button>
+										<button
+											@click="
+												handleRequest(
+													request
+														.id,
+													'reject',
+												)
+											"
+											class="cursor-pointer px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors w-20"
+										>
+											拒绝
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-3 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">
+					共 {{ friendRequests.length }} 条申请
+				</div>
+			</div>
+		</template>
 	</div>
 </template>

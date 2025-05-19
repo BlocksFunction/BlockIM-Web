@@ -31,9 +31,6 @@ const openPrivateChat = (friend: typeof friends[number]) => {
 <template>
 	<aside class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-none">
 		<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-			<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-				好友
-			</h2>
 			<button class="mt-2 w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
 				<UserPlus :size="18" class="text-blue-500" />
 				<span class="text-gray-700 dark:text-gray-300">

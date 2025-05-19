@@ -99,11 +99,11 @@ const notice = [
 								<Paperclip :size="20" />
 							</button>
 							<div class="absolute bottom-full left-0 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 min-w-[120px]">
-								<button class="w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+								<button class="cursor-pointer w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md dark:text-white">
 									<Image :size="16" />
 									<span>图片</span>
 								</button>
-								<button class="w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+								<button class="cursor-pointer w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md dark:text-white">
 									<File :size="16" />
 									<span>文档</span>
 								</button>
@@ -117,7 +117,7 @@ const notice = [
 							placeholder="说些什么..."
 							class="flex-1 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white"
 						/>
-						<button class="p-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors">
+						<button class="cursor-pointer p-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors">
 							<Send :size="20" />
 						</button>
 					</div>
