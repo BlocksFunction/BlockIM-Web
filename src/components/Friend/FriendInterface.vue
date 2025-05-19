@@ -155,7 +155,7 @@ const handleRequest = (id: number, action: string) => {
 				status: index.from.online ? "在线" : "离线",
 			});
 		}
-		updateRequests = updateRequests.filter(item => item !== index);
+		updateRequests[index.id - 1].status = action;
 
 		friendRequests.value = updateRequests;
 		friendGroups.value = updateFriendGroups;
@@ -261,7 +261,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 			<div class="flex-1 overflow-y-auto p-4">
 				<template v-if="activeTab === 'friends'">
 					<div
-						v-for="group in filteredFriendGroups"
+						v-for="group in friendGroups"
 						:key="group.id"
 						class="mb-6"
 					>
@@ -350,7 +350,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 
 				<template v-if="activeTab === 'groups'">
 					<div
-						v-for="category in filteredGroupCategories"
+						v-for="category in groupCategories"
 						:key="category.id"
 						class="mb-6"
 					>
@@ -546,6 +546,11 @@ const truncateText = (text, length, useEllipsis = true) => {
 												)
 											"
 											class="cursor-pointer px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm transition-colors w-20"
+											v-if="
+												request
+												.status =
+													'pending'
+											"
 										>
 											接受
 										</button>
@@ -558,9 +563,30 @@ const truncateText = (text, length, useEllipsis = true) => {
 												)
 											"
 											class="cursor-pointer px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors w-20"
+											v-if="
+												request
+												.status =
+													'pending'
+											"
 										>
 											拒绝
 										</button>
+										<p
+											class="text-red-500"
+											v-if="
+												request
+												.status
+												!= 'pending'
+											"
+										>
+											{{
+												request
+													.status
+													== "reject"
+												? "已拒绝"
+												: "已同意"
+											}}
+										</p>
 									</div>
 								</div>
 							</div>
