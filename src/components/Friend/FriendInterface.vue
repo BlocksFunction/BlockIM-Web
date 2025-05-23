@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { debounce } from "lodash-es";
 import {
 	ChevronDown,
 	ChevronRight,
@@ -6,7 +7,7 @@ import {
 	Search,
 	UserPlus,
 } from "lucide-vue-next";
-import { computed, ref, shallowRef } from "vue";
+import { computed, ref, shallowRef, triggerRef } from "vue";
 
 const activeTab = ref("friends");
 const activePage = ref("");
@@ -110,7 +111,10 @@ const friendRequests = shallowRef([
 			online: true,
 		},
 		message: "我们一起工作吧",
-		time: new Date(Date.now() - 3600000),
+		time: new Date(
+			Date.now()
+				- 1,
+		),
 		status: "pending",
 	},
 	{
@@ -129,14 +133,16 @@ const friendRequests = shallowRef([
 
 const friendRequestsMap = new Map(friendRequests.value.map(r => [r.id, r]));
 
-const formatTime = /*#__PURE__*/ (date) => {
+const formatTime = /*#__PURE__*/ (date: Date): string => {
 	const now = new Date();
-	const diff = now - date;
+	const diff = now.getTime() - date.getTime();
 
-	if (diff < 60000) return "刚刚";
+	if (diff < 1000) return "刚刚";
+	if (diff < 60000) return `${Math.floor(diff / 1000)}秒前`;
 	if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
 	if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
-	return `${Math.floor(diff / 86400000)}天前`;
+	if (diff < 31536000000) return `${Math.floor(diff / 86400000)}天前`;
+	return `${Math.floor(diff / 31536000000)}年前`;
 };
 
 const handleRequest = (id: number, action: string) => {
@@ -166,48 +172,63 @@ const filteredFriendGroups = computed(() => {
 	const query = searchQuery.value.toLowerCase();
 	if (!query) return friendGroups.value;
 
-	return friendGroups.value.reduce((acc, groups) => {
-		const filtered = groups.items.filter(friend =>
+	return friendGroups.value.map(group => {
+		const filteredItems = group.items.filter(friend =>
 			friend.name.toLowerCase().includes(query)
 		);
-		return filtered.length ? [...acc, { ...groups, items: filtered }] : acc;
-	}, []);
+		return { ...group, items: filteredItems };
+	}).filter(group => group.items.length > 0);
 });
 
 const filteredGroupCategories = computed(() => {
 	const query = searchQuery.value.toLowerCase();
 	if (!query) return groupCategories.value;
 
-	return groupCategories.value.reduce((acc, groups) => {
-		const filtered = groups.items.filter(group => {
-			group.name.toLowerCase().includes(query);
-		});
-		return filtered.length ? [...acc, { ...groups, items: filtered }] : acc;
-	}, []);
+	return groupCategories.value.map(category => {
+		const filteredItems = category.items.filter(group =>
+			group.name.toLowerCase().includes(query)
+		);
+		return { ...category, items: filteredItems };
+	}).filter(category => category.items.length > 0);
 });
 
-const toggleGroup = (groupId) => {
-	const group = friendGroups.value.find((g) => g.id === groupId);
-	if (group) group.collapsed = !group.collapsed;
+const toggleGroup = (groupId: string) => {
+	const groupIndex = friendGroups.value.findIndex(g => g.id === groupId);
+	if (groupIndex > -1) {
+		friendGroups.value[groupIndex].collapsed = !friendGroups
+			.value[groupIndex].collapsed;
+		triggerRef(friendGroups);
+	}
 };
 
-const toggleCategory = (categoryId) => {
-	const category = groupCategories.value.find((c) => c.id === categoryId);
-	if (category) category.collapsed = !category.collapsed;
+const toggleCategory = (categoryId: string) => {
+	const categoryIndex = groupCategories.value.findIndex((c) =>
+		c.id === categoryId
+	);
+
+	if (categoryIndex > -1) {
+		friendGroups.value[categoryIndex].collapsed = !friendGroups
+			.value[categoryIndex]
+			.collapsed;
+		triggerRef(friendGroups);
+	}
 };
 
-const truncateText = (text, length, useEllipsis = true) => {
+const truncateText = (text: string, length: number, useEllipsis = true) => {
 	if (text.length <= length) return text;
 	return useEllipsis
 		? text.substring(0, length) + "..."
 		: text.substring(0, length);
 };
+
+const handleSearch = debounce(() => {
+}, 300);
 </script>
 
 <template>
 	<div class="h-full flex flex-col bg-white dark:bg-gray-800 transition-colors duration-200">
-		<div class="p-4">
-			<div class="mt-2 flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-2">
+		<div class="p-4 border-r border-gray-200 dark:border-gray-700">
+			<div class="mt-2 flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-2 border-r border-gray-200 dark:border-gray-700">
 				<Search class="text-gray-500 dark:text-gray-400 w-5 h-5" />
 				<input
 					v-model="searchQuery"
@@ -217,6 +238,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 						? '搜索好友...'
 						: '搜索群聊...'
 					"
+					@input="handleSearch"
 					class="flex-1 bg-transparent focus:outline-none text-sm dark:text-gray-200"
 				/>
 				<button class="cursor-pointer w-auth flex items-center justify-center space-x-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
@@ -225,20 +247,20 @@ const truncateText = (text, length, useEllipsis = true) => {
 			</div>
 		</div>
 
-		<div class="bg-white w-auto dark:bg-gray-800">
+		<div class="bg-white w-auto dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
 			<div class="flex border-b border-gray-200 dark:border-gray-700">
 				<button
-					@click="activePage = 'pending'"
+					@click="activePage = 'friendReq'"
 					class="cursor-pointer text-blue-500 flex p-4 text-sm font-medium transition-colors justify-between w-full"
 					v-once
 				>
-					<span class="text-black">好友信息</span>
+					<span class="text-black">请求信息</span>
 					<ChevronRight />
 				</button>
 			</div>
 		</div>
 
-		<div class="h-full flex flex-col bg-white dark:bg-gray-800">
+		<div class="h-full flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
 			<div class="flex border-b border-gray-200 dark:border-gray-700">
 				<button
 					v-for="tab in tabs"
@@ -261,7 +283,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 			<div class="flex-1 overflow-y-auto p-4">
 				<template v-if="activeTab === 'friends'">
 					<div
-						v-for="group in friendGroups"
+						v-for="group in filteredFriendGroups"
 						:key="group.id"
 						class="mb-6"
 					>
@@ -289,7 +311,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 									:class="
 										{
 											'rotate-180':
-												!group
+												group
 													.collapsed,
 										}
 									"
@@ -350,7 +372,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 
 				<template v-if="activeTab === 'groups'">
 					<div
-						v-for="category in groupCategories"
+						v-for="category in filteredGroupCategories"
 						:key="category.id"
 						class="mb-6"
 					>
@@ -458,7 +480,7 @@ const truncateText = (text, length, useEllipsis = true) => {
 		</div>
 	</div>
 	<div class="w-full">
-		<template v-if="activePage == 'pending'">
+		<template v-if="activePage == 'friendReq'">
 			<div class="h-full flex flex-col bg-white dark:bg-gray-800">
 				<div class="p-4 border-b border-gray-200 dark:border-gray-700">
 					<h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
@@ -548,8 +570,8 @@ const truncateText = (text, length, useEllipsis = true) => {
 											class="cursor-pointer px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm transition-colors w-20"
 											v-if="
 												request
-												.status =
-													'pending'
+												.status
+												== 'pending'
 											"
 										>
 											接受
@@ -565,14 +587,20 @@ const truncateText = (text, length, useEllipsis = true) => {
 											class="cursor-pointer px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 rounded-md text-sm transition-colors w-20"
 											v-if="
 												request
-												.status =
-													'pending'
+												.status
+												== 'pending'
 											"
 										>
 											拒绝
 										</button>
 										<p
-											class="text-red-500"
+											:class="
+												request
+													.status
+													== 'reject'
+												? 'text-red-500'
+												: 'text-green-500'
+											"
 											v-if="
 												request
 												.status
