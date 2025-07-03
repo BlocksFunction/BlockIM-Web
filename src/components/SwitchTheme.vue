@@ -7,24 +7,16 @@ const theme = useTheme();
 const { executeTransition, transitionEvent } = useToggleThemeViewTransition();
 
 function handleThemeToggle(event: MouseEvent) {
-	transitionEvent.value = event;
-	executeTransition(() => {
-		theme.toggleTheme();
-	});
+  transitionEvent.value = event;
+  executeTransition(() => {
+    theme.toggleTheme();
+  });
 }
 </script>
 
 <template>
-	<button @click="handleThemeToggle" class="cursor-pointer">
-		<Sun
-			:size="30"
-			class="text-yellow-500"
-			v-if="theme.getTheme == 'light'"
-		/>
-		<MoonStar
-			class="text-blue-500"
-			:size="30"
-			v-else
-		/>
-	</button>
+  <button @click="handleThemeToggle" class="cursor-pointer">
+    <Sun :size="30" class="text-yellow-500" v-if="theme.getTheme == 'light'" />
+    <MoonStar class="text-blue-500" :size="30" v-else />
+  </button>
 </template>

@@ -2,19 +2,19 @@ import Cookies from "js-cookie";
 import { computed, ref, watch } from "vue";
 
 const useCookie = (
-	cookieName: string,
-	defaultValue: string,
-	options?: Cookies.CookieAttributes,
+  cookieName: string,
+  defaultValue: string,
+  options?: Cookies.CookieAttributes,
 ) => {
-	const cookie = ref(Cookies.get(cookieName) ?? defaultValue);
+  const cookie = ref(Cookies.get(cookieName) ?? defaultValue);
 
-	function setCookie(value: string) {
-		Cookies.set(cookieName, value, options);
-	}
+  function setCookie(value: string) {
+    Cookies.set(cookieName, value, options);
+  }
 
-	watch(cookie, (newValue) => setCookie(newValue));
+  watch(cookie, (newValue) => setCookie(newValue));
 
-	return { cookie };
+  return { cookie };
 };
 
 export default useCookie;

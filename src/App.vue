@@ -7,8 +7,8 @@ const theme = useTheme();
 </script>
 
 <template>
-	<div :class="theme.getTheme">
-		<RouterView />
-		<Toaster />
-	</div>
+  <div :class="theme.getTheme">
+    <RouterView />
+    <Toaster />
+  </div>
 </template>
