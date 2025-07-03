@@ -7,7 +7,7 @@ import {
 	Search,
 	UserPlus,
 } from "lucide-vue-next";
-import { computed, ref, shallowRef, triggerRef } from "vue";
+import { computed, ref, shallowRef, triggerRef, watch, watchEffect } from "vue";
 
 const activeTab = ref("friends");
 const activePage = ref("");
@@ -17,6 +17,16 @@ const tabs = ref([
 	{ id: "friends", label: "好友" },
 	{ id: "groups", label: "群聊" },
 ]);
+
+// 组件中使用示例
+import {
+	friendGroups,
+	friendRequests,
+	groupCategories,
+	loadAllData,
+} from "@/lib/tool/database/useSocialData";
+import { onMounted } from "vue";
+import { initDatabase } from "./db";
 
 const friendGroups = shallowRef([
 	{
@@ -171,7 +181,6 @@ const handleRequest = (id: number, action: string) => {
 const filteredFriendGroups = computed(() => {
 	const query = searchQuery.value.toLowerCase();
 	if (!query) return friendGroups.value;
-
 	return friendGroups.value.map(group => {
 		const filteredItems = group.items.filter(friend =>
 			friend.name.toLowerCase().includes(query)
@@ -197,7 +206,7 @@ const toggleGroup = (groupId: string) => {
 	if (groupIndex > -1) {
 		friendGroups.value[groupIndex].collapsed = !friendGroups
 			.value[groupIndex].collapsed;
-		triggerRef(friendGroups);
+		friendGroups.value = [...friendGroups.value];
 	}
 };
 
@@ -207,10 +216,10 @@ const toggleCategory = (categoryId: string) => {
 	);
 
 	if (categoryIndex > -1) {
-		friendGroups.value[categoryIndex].collapsed = !friendGroups
+		groupCategories.value[categoryIndex].collapsed = !groupCategories
 			.value[categoryIndex]
 			.collapsed;
-		triggerRef(friendGroups);
+		groupCategories.value = [...groupCategories.value];
 	}
 };
 
@@ -221,8 +230,7 @@ const truncateText = (text: string, length: number, useEllipsis = true) => {
 		: text.substring(0, length);
 };
 
-const handleSearch = debounce(() => {
-}, 300);
+const showFallback = ref<boolean>(false);
 </script>
 
 <template>
@@ -238,7 +246,11 @@ const handleSearch = debounce(() => {
 						? '搜索好友...'
 						: '搜索群聊...'
 					"
-					@input="handleSearch"
+					@input="
+						() =>
+						debounce(() => {
+						}, 300)
+					"
 					class="flex-1 bg-transparent focus:outline-none text-sm dark:text-gray-200"
 				/>
 				<button class="cursor-pointer w-auth flex items-center justify-center space-x-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
@@ -254,7 +266,7 @@ const handleSearch = debounce(() => {
 					class="cursor-pointer text-blue-500 flex p-4 text-sm font-medium transition-colors justify-between w-full"
 					v-once
 				>
-					<span class="text-black">请求信息</span>
+					<span class="text-black dark:text-white">请求信息</span>
 					<ChevronRight />
 				</button>
 			</div>
@@ -327,13 +339,23 @@ const handleSearch = debounce(() => {
 							>
 								<div class="relative flex-shrink-0">
 									<div class="w-10 h-10 bg-blue-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+										<img
+											v-show="!showFallback"
+											:src="`/api/avatar/get/blk`"
+											@error="
+												showFallback =
+												true
+											"
+											class="w-full h-full rounded-full object-cover bg-transparent"
+										>
 										<span
-											class="text-gray-600 dark:text-gray-300 font-medium"
+											v-show="showFallback"
+											class="text-gray-600 dark:text-gray-300 font-medium transition-opacity duration-200"
 										>
 											{{
 												truncateText(
 													friend
-														.avatar,
+														.name,
 													2,
 													false,
 												)
@@ -479,7 +501,7 @@ const handleSearch = debounce(() => {
 			</div>
 		</div>
 	</div>
-	<div class="w-full">
+	<div class="w-full bg-white dark:bg-gray-800">
 		<template v-if="activePage == 'friendReq'">
 			<div class="h-full flex flex-col bg-white dark:bg-gray-800">
 				<div class="p-4 border-b border-gray-200 dark:border-gray-700">

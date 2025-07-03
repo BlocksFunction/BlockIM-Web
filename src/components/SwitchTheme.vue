@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useToggleThemeViewTransition } from "@/lib/useToggleThemeViewTransition.ts";
+import { useToggleThemeViewTransition } from "@/lib/tool/useTools/useToggleThemeViewTransition.ts";
 import useTheme from "@/stores/useTheme.ts";
 import { MoonStar, Sun } from "lucide-vue-next";
 
@@ -28,18 +28,3 @@ function handleThemeToggle(event: MouseEvent) {
 		/>
 	</button>
 </template>
-
-<style>
-:root {
-	&::view-transition-old(root),
-	&::view-transition-new(root) {
-		animation: none;
-		mix-blend-mode: normal;
-		z-index: 1;
-	}
-
-	&::view-transition-old(root) {
-		z-index: 999;
-	}
-}
-</style>

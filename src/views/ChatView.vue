@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ChatInterface from "@/components/Chat/ChatInterface.vue";
+import FriendList from "@/components/Chat/FriendList.vue";
 import FriendInterface from "@/components/Friend/FriendInterface.vue";
 import {
 	MessageCircle,
@@ -9,7 +10,12 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 
-const currentPage = ref("chat");
+enum Page {
+	Chat = "chat",
+	Friend = "friend",
+}
+
+const currentPage = ref<Page>(Page.Chat);
 </script>
 
 <template>
@@ -18,13 +24,23 @@ const currentPage = ref("chat");
 			<aside class="w-20 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-none items-center py-4 space-y-4">
 				<button
 					class="p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
-					@click="currentPage = 'chat'"
+					:class="
+						currentPage === Page.Chat
+						? 'bg-gray-200 dark:bg-gray-600'
+						: ''
+					"
+					@click="currentPage = Page.Chat"
 				>
 					<MessageCircle class="text-gray-600 dark:text-gray-300" />
 				</button>
 				<button
 					class="p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
-					@click="currentPage = 'friend'"
+					:class="
+						currentPage === Page.Friend
+						? 'bg-gray-200 dark:bg-gray-600'
+						: ''
+					"
+					@click="currentPage = Page.Friend"
 				>
 					<Users
 						class="text-gray-600 dark:text-gray-300"

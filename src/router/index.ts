@@ -1,6 +1,7 @@
-import { useCookie } from "@/lib/useTools.ts";
-import Auth from "@/router/modules/Auth.ts";
+import useCookie from "@/lib/tool/useTools/useCookie";
+import Auth from "@/router/modules/Auth";
 import ChatView from "@/views/ChatView.vue";
+import TestPage from "@/views/TestPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -10,6 +11,11 @@ const router = createRouter({
 			path: "/",
 			name: "Chat",
 			component: ChatView,
+		},
+		{
+			path: "/t",
+			name: "Test",
+			component: TestPage,
 		},
 		...Auth,
 	],
@@ -22,7 +28,7 @@ router.beforeEach((to, from, next) => {
 		const token = useCookie("token", "");
 		const clientId = useCookie("clientId", "");
 
-		if (token && clientId) {
+		if (token.cookie.value != "" && clientId.cookie.value != "") {
 			next();
 		} else {
 			next({ name: "Login" });

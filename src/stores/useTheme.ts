@@ -1,4 +1,4 @@
-import { useCookie } from "@/lib/useTools";
+import useCookie from "@/lib/tool/useTools/useCookie";
 import { defineStore } from "pinia";
 import { computed } from "vue";
 

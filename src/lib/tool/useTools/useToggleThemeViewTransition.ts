@@ -1,6 +1,5 @@
-import useCookie from "@/lib/useTools/useCookie.ts";
 import useTheme from "@/stores/useTheme.ts";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 export const useToggleThemeViewTransition = () => {
 	const transitionEvent = ref<MouseEvent | null>(null);
@@ -28,26 +27,26 @@ export const useToggleThemeViewTransition = () => {
 		const transition = document.startViewTransition(() => callback());
 
 		transition.ready.then(() => {
-			const isDark = computed(
-				() => theme.getTheme === "light",
-			);
 			const clipPath = [
 				`circle(0px at ${x}px ${y}px)`,
 				`circle(${endRadius}px at ${x}px ${y}px)`,
 			];
-
+			const isDark = theme.getTheme === "dark";
 			document.documentElement.animate(
 				{
-					clipPath: isDark.value ? [...clipPath].reverse() : clipPath,
+					clipPath: isDark
+						? clipPath
+						: [...clipPath].reverse(),
 				},
 				{
 					duration: 900,
 					easing: "ease-in",
-					pseudoElement: true
-						? "::view-transition-old(root)"
-						: "::view-transition-new(root)",
+					pseudoElement: isDark
+						? "::view-transition-new(root)"
+						: "::view-transition-old(root)",
 				},
 			);
+			console.log(isDark);
 		});
 		transition.finished.finally(() => {
 			isTransitioning.value = false;
