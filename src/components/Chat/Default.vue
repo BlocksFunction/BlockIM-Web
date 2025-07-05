@@ -22,19 +22,19 @@ import { MessageCircle, UserPlus, Users } from "lucide-vue-next";
 		<p class="text-gray-500 dark:text-gray-400 max-w-md">
 			从左侧选择好友开始聊天，或者创建新的群组与多人交流~
 		</p>
-		<!--		<div class="mt-6 flex gap-4">-->
-		<!--			<button-->
-		<!--				class="cursor-pointer px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center"-->
-		<!--			>-->
-		<!--				<UserPlus class="mr-2" :size="18" />-->
-		<!--				添加好友-->
-		<!--			</button>-->
-		<!--			<button-->
-		<!--				class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center"-->
-		<!--			>-->
-		<!--				<Users class="mr-2" :size="18" />-->
-		<!--				新建群聊-->
-		<!--			</button>-->
-		<!--		</div>-->
+		<div class="mt-6 flex gap-4">
+			<button
+				class="cursor-pointer px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center"
+			>
+				<UserPlus class="mr-2" :size="18" />
+				添加好友
+			</button>
+			<button
+				class="cursor-pointer px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center"
+			>
+				<Users class="mr-2" :size="18" />
+				新建群聊
+			</button>
+		</div>
 	</div>
 </template>

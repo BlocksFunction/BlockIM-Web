@@ -13,7 +13,6 @@ import {
 	Server,
 	Smartphone,
 } from "lucide-vue-next";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const features = [
 	{ id: 1, text: "端到端加密", icon: Lock },
@@ -31,7 +30,6 @@ const teamMembers = [
 const appName = import.meta.env.VITE_APP_NAME;
 const appDescription = import.meta.env.VITE_APP_DESCRIPTIO;
 const appVersion = import.meta.env.VITE_APP_VERSION;
-const customColor = useCustomColor();
 </script>
 
 <template>
@@ -76,12 +74,7 @@ const customColor = useCustomColor();
 						>
 							<component
 								:is="feature.icon"
-								class="w-5 h-5"
-								:class="
-									customColor
-									.getCurrentColorClass
-									.themeText
-								"
+								class="w-5 h-5 text-blue-500"
 							/>
 						</div>
 						<span

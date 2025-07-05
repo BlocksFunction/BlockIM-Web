@@ -32,7 +32,6 @@ import About from "@/components/Config/Help/About.vue";
 import Message from "@/components/Config/Notifications/Message.vue";
 import Call from "@/components/Config/Notifications/Call.vue";
 import System from "@/components/Config/Notifications/System.vue";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const settings = [
 	{
@@ -80,7 +79,6 @@ const settings = [
 const expandedSection = ref<string | null>(null);
 
 const currentPage = ref("default");
-const customColor = useCustomColor();
 
 const toggleSection = (sectionId: string) => {
 	expandedSection.value = expandedSection.value === sectionId
@@ -118,12 +116,7 @@ const toggleSection = (sectionId: string) => {
 										item
 										.icon
 									"
-									class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 transition-colors"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.groupHover
-									"
+									class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 transition-colors group-hover:text-blue-500"
 								/>
 								<span
 									class="font-medium text-gray-700 dark:text-gray-300"

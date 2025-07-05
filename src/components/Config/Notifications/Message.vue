@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Bell, BellOff, Mail, MessageSquare, Vibrate } from "lucide-vue-next";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
+import { Bell, BellOff, Mail, Vibrate } from "lucide-vue-next";
 
 const settings = ref({
 	enabled: true,
@@ -20,8 +19,6 @@ const settings = ref({
 		{ id: "bubble", name: "气泡声" },
 	],
 });
-
-const customColor = useCustomColor();
 
 const toggleSetting = (setting: keyof typeof settings.value) => {
 	if (setting === "enabled" || setting === "vibrate") {
@@ -56,14 +53,7 @@ const toggleSilentHours = () => {
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center">
-							<Bell
-								class="w-6 h-6 mr-3"
-								:class="
-									customColor
-									.getCurrentColorClass
-									.themeText
-								"
-							/>
+							<Bell class="w-6 h-6 mr-3 text-blue-500" />
 							<div>
 								<h2
 									class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -100,14 +90,7 @@ const toggleSilentHours = () => {
 
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-start">
-						<Mail
-							class="w-6 h-6 mt-1 mr-3"
-							:class="
-								customColor
-								.getCurrentColorClass
-								.themeText
-							"
-						/>
+						<Mail class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 						<div class="flex-1">
 							<h2
 								class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -129,24 +112,12 @@ const toggleSilentHours = () => {
 									:key="sound.id"
 									class="p-3 rounded-lg border transition-colors"
 									:class='
-										[
-											settings
-													.sound ===
-													sound
-														.id
-												? [
-													customColor
-														.getCurrentColorClass
-														.themeBorder,
-													customColor
-														.getCurrentColorClass
-														.themeBgLight,
-													customColor
-														.getCurrentColorClass
-														.themeBgDark,
-												]
-												: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
-										]
+										settings
+											.sound ===
+											sound
+												.id
+										? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+										: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
 									'
 									@click="
 										settings
@@ -155,26 +126,21 @@ const toggleSilentHours = () => {
 												.id
 									"
 								>
-									<div class="flex items-center">
-										<div
+									<span class="flex items-center">
+										<span
 											class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3"
 										>
 											<Bell
-												class="w-4 h-4"
-												:class="
-													customColor
-													.getCurrentColorClass
-													.themeText
-												"
+												class="w-4 h-4 text-blue-500"
 											/>
-										</div>
+										</span>
 										<span
 											class="text-sm font-medium text-gray-700 dark:text-gray-300"
 										>{{
 											sound
 											.name
 										}}</span>
-									</div>
+									</span>
 								</button>
 							</div>
 						</div>
@@ -185,14 +151,7 @@ const toggleSilentHours = () => {
 					<div class="space-y-4">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<Vibrate
-									class="w-6 h-6 mr-3"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.themeText
-									"
-								/>
+								<Vibrate class="w-6 h-6 mr-3 text-blue-500" />
 								<div>
 									<h2
 										class="font-medium text-gray-900 dark:text-white"
@@ -233,14 +192,7 @@ const toggleSilentHours = () => {
 
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<Bell
-									class="w-6 h-6 mr-3"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.themeText
-									"
-								/>
+								<Bell class="w-6 h-6 mr-3 text-blue-500" />
 								<div>
 									<h2
 										class="font-medium text-gray-900 dark:text-white"
@@ -256,17 +208,7 @@ const toggleSilentHours = () => {
 							</div>
 							<select
 								v-model="settings.preview"
-								class="px-3 py-1.5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
-								:class="
-									[
-										customColor
-											.getCurrentColorClass
-											.focusRing,
-										customColor
-											.getCurrentColorClass
-											.focusBorder,
-									]
-								"
+								class="px-3 py-1.5 bg-gray-50 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
 							>
 								<option value="full">显示完整内容</option>
 								<option value="partial">仅显示发送者</option>
@@ -278,14 +220,7 @@ const toggleSilentHours = () => {
 
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-start">
-						<BellOff
-							class="w-6 h-6 mt-1 mr-3"
-							:class="
-								customColor
-								.getCurrentColorClass
-								.themeText
-							"
-						/>
+						<BellOff class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 						<div class="flex-1">
 							<div class="flex justify-between items-start">
 								<div>
@@ -344,17 +279,7 @@ const toggleSilentHours = () => {
 												.start
 											"
 											type="time"
-											class="w-full p-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
-											:class="
-												[
-													customColor
-														.getCurrentColorClass
-														.focusRing,
-													customColor
-														.getCurrentColorClass
-														.focusBorder,
-												]
-											"
+											class="w-full p-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
 										/>
 									</div>
 									<div>
@@ -368,17 +293,7 @@ const toggleSilentHours = () => {
 												.end
 											"
 											type="time"
-											class="w-full p-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
-											:class="
-												[
-													customColor
-														.getCurrentColorClass
-														.focusRing,
-													customColor
-														.getCurrentColorClass
-														.focusBorder,
-												]
-											"
+											class="w-full p-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2"
 										/>
 									</div>
 								</div>

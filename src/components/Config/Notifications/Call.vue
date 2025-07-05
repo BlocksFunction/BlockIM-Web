@@ -8,7 +8,6 @@ import {
 	PhoneOff,
 	Vibrate,
 } from "lucide-vue-next";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const settings = ref({
 	incomingEnabled: true,
@@ -23,7 +22,7 @@ const settings = ref({
 		{ id: "melody", name: "旋律铃声" },
 	],
 });
-const customColor = useCustomColor();
+
 const toggleSetting = (setting: keyof typeof settings.value) => {
 	if (
 		setting === "incomingEnabled" || setting === "missedEnabled" ||
@@ -56,14 +55,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center">
-							<Phone
-								class="w-6 h-6 mr-3"
-								:class="
-									customColor
-									.getCurrentColorClass
-									.themeText
-								"
-							/>
+							<Phone class="w-6 h-6 mr-3 text-blue-500" />
 							<div>
 								<h2
 									class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -106,14 +98,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center">
-							<PhoneOff
-								class="w-6 h-6 mr-3"
-								:class="
-									customColor
-									.getCurrentColorClass
-									.themeText
-								"
-							/>
+							<PhoneOff class="w-6 h-6 mr-3 text-blue-500" />
 							<div>
 								<h2
 									class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -155,14 +140,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-start">
-						<Bell
-							class="w-6 h-6 mt-1 mr-3"
-							:class="
-								customColor
-								.getCurrentColorClass
-								.themeText
-							"
-						/>
+						<Bell class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 						<div class="flex-1">
 							<h2
 								class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -187,24 +165,12 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 									"
 									class="p-3 rounded-lg border transition-colors"
 									:class='
-										[
-											settings
-													.sound ===
-													ringtone
-														.id
-												? [
-													customColor
-														.getCurrentColorClass
-														.themeBorder,
-													customColor
-														.getCurrentColorClass
-														.themeBgLight,
-													customColor
-														.getCurrentColorClass
-														.themeBgDark,
-												]
-												: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
-										]
+										settings
+											.sound ===
+											ringtone
+												.id
+										? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+										: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
 									'
 									@click="
 										settings
@@ -218,12 +184,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 											class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3"
 										>
 											<Bell
-												class="w-4 h-4"
-												:class="
-													customColor
-													.getCurrentColorClass
-													.themeText
-												"
+												class="w-4 h-4 text-blue-500"
 											/>
 										</span>
 										<span
@@ -243,14 +204,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 					<div class="space-y-4">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<Vibrate
-									class="w-6 h-6 mr-3"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.themeText
-									"
-								/>
+								<Vibrate class="w-6 h-6 mr-3 text-blue-500" />
 								<div>
 									<h2
 										class="font-medium text-gray-900 dark:text-white"
@@ -291,14 +245,7 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<BellOff
-									class="w-6 h-6 mr-3"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.themeText
-									"
-								/>
+								<BellOff class="w-6 h-6 mr-3 text-blue-500" />
 								<div>
 									<h2
 										class="font-medium text-gray-900 dark:text-white"

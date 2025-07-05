@@ -8,7 +8,6 @@ import {
 	UserCheck,
 	Vibrate,
 } from "lucide-vue-next";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const settings = ref({
 	updatesEnabled: true,
@@ -33,7 +32,6 @@ const toggleSetting = (setting: keyof typeof settings.value) => {
 };
 
 const appName = import.meta.env.VITE_APP_NAME;
-const customColor = useCustomColor();
 </script>
 
 <template>
@@ -57,14 +55,7 @@ const customColor = useCustomColor();
 			<div class="space-y-6">
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-start">
-						<Bell
-							class="w-6 h-6 mt-1 mr-3"
-							:class="
-								customColor
-								.getCurrentColorClass
-								.themeText
-							"
-						/>
+						<Bell class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 						<div class="flex-1">
 							<h2
 								class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -81,12 +72,7 @@ const customColor = useCustomColor();
 								<div class="flex items-center justify-between">
 									<div class="flex items-center">
 										<RefreshCw
-											class="w-5 h-5 mr-3"
-											:class="
-												customColor
-												.getCurrentColorClass
-												.themeText
-											"
+											class="w-5 h-5 mr-3 text-blue-500"
 										/>
 										<div>
 											<h2
@@ -130,12 +116,7 @@ const customColor = useCustomColor();
 								<div class="flex items-center justify-between">
 									<div class="flex items-center">
 										<Shield
-											class="w-5 h-5 mr-3"
-											:class="
-												customColor
-												.getCurrentColorClass
-												.themeText
-											"
+											class="w-5 h-5 mr-3 text-blue-500"
 										/>
 										<div>
 											<h2
@@ -179,12 +160,7 @@ const customColor = useCustomColor();
 								<div class="flex items-center justify-between">
 									<div class="flex items-center">
 										<UserCheck
-											class="w-5 h-5 mr-3"
-											:class="
-												customColor
-												.getCurrentColorClass
-												.themeText
-											"
+											class="w-5 h-5 mr-3 text-blue-500"
 										/>
 										<div>
 											<h2
@@ -231,14 +207,7 @@ const customColor = useCustomColor();
 
 				<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 					<div class="flex items-start">
-						<Bell
-							class="w-6 h-6 mt-1 mr-3"
-							:class="
-								customColor
-								.getCurrentColorClass
-								.themeText
-							"
-						/>
+						<Bell class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 						<div class="flex-1">
 							<h2
 								class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -265,17 +234,7 @@ const customColor = useCustomColor();
 													.sound ===
 													sound
 														.id
-												? [
-													customColor
-														.getCurrentColorClass
-														.themeBorder,
-													customColor
-														.getCurrentColorClass
-														.themeBgLight,
-													customColor
-														.getCurrentColorClass
-														.themeBgDark,
-												]
+												? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
 												: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
 										]
 									'
@@ -291,12 +250,7 @@ const customColor = useCustomColor();
 											class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-3"
 										>
 											<Bell
-												class="w-4 h-4"
-												:class="
-													customColor
-													.getCurrentColorClass
-													.themeText
-												"
+												class="w-4 h-4 text-blue-500"
 											/>
 										</span>
 										<span
@@ -316,14 +270,7 @@ const customColor = useCustomColor();
 					<div class="space-y-4">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<Vibrate
-									class="w-6 h-6 mr-3"
-									:class="
-										customColor
-										.getCurrentColorClass
-										.themeText
-									"
-								/>
+								<Vibrate class="w-6 h-6 mr-3 text-blue-500" />
 								<div>
 									<h2
 										class="font-medium text-gray-900 dark:text-white"

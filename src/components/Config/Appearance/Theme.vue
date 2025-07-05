@@ -10,10 +10,8 @@ import {
 	Sun,
 } from "lucide-vue-next";
 import useTheme from "@/stores/useTheme";
-import { useCustomColor } from "@/stores/useCustomColor";
 
 const theme = useTheme();
-const customColor = useCustomColor();
 
 const colorThemes = ref([
 	{ id: "blue", name: "蓝色", class: "bg-blue-500" },
@@ -47,13 +45,7 @@ const themeOptions = ref([
 				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
 			>
 				<div class="flex items-start mb-6">
-					<Palette
-						class="w-6 h-6 mt-1 mr-3"
-						:class="
-							customColor.getCurrentColorClass
-							.themeText
-						"
-					/>
+					<Palette class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -75,21 +67,9 @@ const themeOptions = ref([
 						@click="theme.setTheme(option.id as any)"
 						class="p-4 border rounded-xl transition-all"
 						:class='
-							[
-								theme.getTheme === option.id
-									? [
-										customColor
-											.getCurrentColorClass
-											.themeBorder,
-										customColor
-											.getCurrentColorClass
-											.themeBgLight,
-										customColor
-											.getCurrentColorClass
-											.themeBgDark,
-									]
-									: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
-							]
+							theme.getTheme === option.id
+							? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+							: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
 						'
 					>
 						<span class="flex flex-col items-center">
@@ -100,10 +80,8 @@ const themeOptions = ref([
 									theme
 										.getTheme ===
 										option.id
-									? customColor
-										.getCurrentColorClass
-										.themeIconText
-									: "text-gray-400 dark:text-gray-500"
+									? "text-blue-500"
+									: "text-gray-700 dark:text-gray-300"
 								'
 							/>
 							<span
@@ -112,9 +90,7 @@ const themeOptions = ref([
 									theme
 										.getTheme ===
 										option.id
-									? customColor
-										.getCurrentColorClass
-										.themeText
+									? "text-blue-500"
 									: "text-gray-700 dark:text-gray-300"
 								'
 							>
@@ -128,107 +104,9 @@ const themeOptions = ref([
 				</div>
 			</div>
 
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
-			>
-				<div class="flex items-start mb-6">
-					<Palette
-						class="w-6 h-6 mt-1 mr-3"
-						:class="
-							customColor.getCurrentColorClass
-							.themeText
-						"
-					/>
-					<div class="flex-1">
-						<h2
-							class="text-lg font-semibold text-gray-900 dark:text-white"
-						>
-							主题颜色
-						</h2>
-						<p
-							class="text-sm text-gray-500 dark:text-gray-400 mt-1"
-						>
-							选择您喜欢的主题颜色
-						</p>
-					</div>
-				</div>
-
-				<div
-					class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4"
-				>
-					<button
-						v-for="color in colorThemes"
-						:key="color.id"
-						@click="
-							customColor.setSelectedColor(
-								color.id as any,
-							)
-						"
-						class="group"
-					>
-						<span class="flex flex-col items-center">
-							<div
-								class="w-12 h-12 rounded-full flex items-center justify-center mb-2"
-								:class='
-									[
-										color.class,
-										customColor
-												.selectedColor
-												.cookie ===
-												color
-													.id
-											? [
-												"ring-2",
-												"ring-offset-2",
-												customColor
-													.getCurrentColorClass
-													.colorButtonRing,
-											]
-											: "",
-									]
-								'
-							>
-								<Check
-									v-if="
-										customColor
-										.selectedColor
-										.cookie ===
-										color
-											.id
-									"
-									class="w-6 h-6 text-white"
-								/>
-							</div>
-							<span
-								class="text-sm"
-								:class='
-									customColor
-										.selectedColor
-										.cookie ===
-										color.id
-									? `${customColor.getCurrentColorClass.themeText} font-medium`
-									: "text-gray-700 dark:text-gray-300"
-								'
-							>
-								{{
-									color
-									.name
-								}}
-							</span>
-						</span>
-					</button>
-				</div>
-			</div>
-
 			<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 				<div class="flex items-start mb-6">
-					<Monitor
-						class="w-6 h-6 mt-1 mr-3"
-						:class="
-							customColor.getCurrentColorClass
-							.themeText
-						"
-					/>
+					<Monitor class="w-6 h-6 mt-1 mr-3 text-blue-500" />
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -299,14 +177,7 @@ const themeOptions = ref([
 								<div class="space-y-3">
 									<div class="flex justify-end">
 										<div
-											:class='
-												[
-													customColor
-														.getCurrentColorClass
-														.bubbleBg,
-													"text-white rounded-xl rounded-br-none px-4 py-2 max-w-xs",
-												]
-											'
+											class="text-white rounded-xl rounded-br-none px-4 py-2 max-w-xs bg-blue-500"
 										>
 											你好，最近怎么样？
 										</div>
@@ -330,14 +201,7 @@ const themeOptions = ref([
 										class="flex-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none dark:text-gray-300"
 									/>
 									<button
-										:class='
-											[
-												customColor
-													.getCurrentColorClass
-													.bubbleBg,
-												"ml-2 p-2 text-white rounded-lg",
-											]
-										'
+										class="ml-2 p-2 text-white rounded-lg bg-blue-500"
 									>
 										<Send class="w-5 h-5" />
 									</button>
@@ -395,30 +259,10 @@ const themeOptions = ref([
 									</div>
 
 									<div
-										:class='
-											[
-												"flex items-center p-2 rounded-lg",
-												customColor
-													.getCurrentColorClass
-													.mobileBgLight,
-												customColor
-													.getCurrentColorClass
-													.mobileBgDark,
-											]
-										'
+										class="flex items-center p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30"
 									>
 										<div
-											:class='
-												[
-													"w-8 h-8 rounded-full flex items-center justify-center mr-2",
-													customColor
-														.getCurrentColorClass
-														.mobileAvatarBg,
-													customColor
-														.getCurrentColorClass
-														.mobileAvatarBgDark,
-												]
-											'
+											class="w-8 h-8 rounded-full flex items-center justify-center mr-2 bg-blue-300 dark:bg-blue-700"
 										>
 											<span class="text-xs text-white"
 											>IA</span>

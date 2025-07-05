@@ -8,7 +8,6 @@ import {
 	Mail,
 	Send,
 } from "lucide-vue-next";
-import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const feedbackType = ref("suggestion");
 const feedbackContent = ref("");
@@ -18,7 +17,6 @@ const isSubmitting = ref(false);
 const submitSuccess = ref(false);
 const submitError = ref(false);
 const appName = import.meta.env.VITE_APP_NAME;
-const customColor = useCustomColor();
 
 const feedbackTypes = [
 	{ id: "suggestion", label: "功能建议", icon: FileText },
@@ -116,22 +114,10 @@ const submitFeedback = () => {
 								"
 								class="p-4 border rounded-lg transition-all duration-200"
 								:class='
-									[
-										feedbackType ===
-												type.id
-											? [
-												customColor
-													.getCurrentColorClass
-													.themeBorder,
-												customColor
-													.getCurrentColorClass
-													.themeBgLight,
-												customColor
-													.getCurrentColorClass
-													.themeBgDark,
-											]
-											: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
-									]
+									feedbackType ===
+										type.id
+									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+									: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
 								'
 							>
 								<span class="flex flex-col items-center">
@@ -144,10 +130,8 @@ const submitFeedback = () => {
 										:class='
 											feedbackType ===
 												type.id
-											? customColor
-												.getCurrentColorClass
-												.themeText
-											: "text-gray-500 dark:text-gray-400"
+											? "text-blue-500"
+											: "text-gray-700 dark:text-gray-300"
 										'
 									/>
 									<span
@@ -155,9 +139,7 @@ const submitFeedback = () => {
 										:class='
 											feedbackType ===
 												type.id
-											? customColor
-												.getCurrentColorClass
-												.themeText
+											? "text-blue-500"
 											: "text-gray-700 dark:text-gray-300"
 										'
 									>
@@ -180,17 +162,7 @@ const submitFeedback = () => {
 						<textarea
 							v-model="feedbackContent"
 							placeholder="请详细描述您的反馈、建议或遇到的问题..."
-							class="w-full p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 dark:text-white"
-							:class="
-								[
-									customColor
-										.getCurrentColorClass
-										.focusBorder,
-									customColor
-										.getCurrentColorClass
-										.focusRing,
-								]
-							"
+							class="w-full h-40 p-4 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 						></textarea>
 					</div>
 
@@ -209,17 +181,7 @@ const submitFeedback = () => {
 							v-model="contactInfo"
 							type="text"
 							placeholder="邮箱或手机号码"
-							class="w-full p-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-1 dark:text-white"
-							:class="
-								[
-									customColor
-										.getCurrentColorClass
-										.focusBorder,
-									customColor
-										.getCurrentColorClass
-										.focusRing,
-								]
-							"
+							class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 						/>
 					</div>
 
@@ -286,20 +248,12 @@ const submitFeedback = () => {
 						<button
 							@click="submitFeedback"
 							:disabled="isSubmitting"
-							class="w-full py-3 text-white rounded-lg transition-colors flex items-center justify-center"
+							class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center"
 							:class='
-								[
-									{
-										"opacity-70 cursor-not-allowed":
-											isSubmitting,
-									},
-									customColor
-										.getCurrentColorClass
-										.bubbleBg,
-									customColor
-										.getCurrentColorClass
-										.hoverDark,
-								]
+								{
+									"opacity-70 cursor-not-allowed":
+										isSubmitting,
+								}
 							'
 						>
 							<template v-if="isSubmitting">
