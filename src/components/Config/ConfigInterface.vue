@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Theme from "@/components/Config/Appearance/Theme.vue";
 import {
-	AppWindowMac,
 	Bell,
 	Brush,
 	ChevronRight,
@@ -21,16 +20,19 @@ import {
 	User,
 	UserLock,
 } from "lucide-vue-next";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Profile from "@/components/Config/Accout/Profile.vue";
 import Security from "@/components/Config/Accout/Security.vue";
 import Privacy from "@/components/Config/Accout/Privacy.vue";
 import Font from "@/components/Config/Appearance/Font.vue";
-import Layout from "@/components/Config/Appearance/Layout.vue";
 import FAQ from "@/components/Config/Help/FAQ.vue";
 import Feedback from "@/components/Config/Help/Feedback.vue";
 import Contact from "@/components/Config/Help/Contact.vue";
 import About from "@/components/Config/Help/About.vue";
+import Message from "@/components/Config/Notifications/Message.vue";
+import Call from "@/components/Config/Notifications/Call.vue";
+import System from "@/components/Config/Notifications/System.vue";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const settings = [
 	{
@@ -60,7 +62,6 @@ const settings = [
 		options: [
 			{ id: "theme", label: "主题设置", icon: Palette },
 			{ id: "font", label: "字体设置", icon: Type },
-			{ id: "layout", label: "布局设置", icon: AppWindowMac },
 		],
 	},
 	{
@@ -79,12 +80,7 @@ const settings = [
 const expandedSection = ref<string | null>(null);
 
 const currentPage = ref("default");
-// const notificationEnabled = ref(true);
-// const soundEnabled = ref(true);
-// const appName = import.meta.env.VITE_APP_NAME || "BlockIM";
-// const appVersion = import.meta.env.VITE_APP_VERSION || "1.0.0";
-// const appDescription = import.meta.env.VITE_APP_DESCRIPTION ||
-// 	"一款现代化的即时通讯应用";
+const customColor = useCustomColor();
 
 const toggleSection = (sectionId: string) => {
 	expandedSection.value = expandedSection.value === sectionId
@@ -122,7 +118,12 @@ const toggleSection = (sectionId: string) => {
 										item
 										.icon
 									"
-									class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 group-hover:text-blue-500 transition-colors"
+									class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 transition-colors"
+									:class="
+										customColor
+										.getCurrentColorClass
+										.groupHover
+									"
 								/>
 								<span
 									class="font-medium text-gray-700 dark:text-gray-300"
@@ -156,6 +157,13 @@ const toggleSection = (sectionId: string) => {
 							<li v-for="option in item.options" :key="option.id">
 								<button
 									class="w-full flex items-center justify-between p-2 rounded-lg text-sm text-left text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+									:class='
+										currentPage ===
+											option
+												.id
+										? "bg-gray-200 dark:bg-gray-600"
+										: ""
+									'
 									@click="
 										currentPage =
 										option
@@ -168,7 +176,7 @@ const toggleSection = (sectionId: string) => {
 												option
 												.icon
 											"
-											class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 group-hover:text-blue-500 transition-colors"
+											class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-3 transition-colors"
 										/>
 										<span
 											class="font-medium text-gray-700 dark:text-gray-300"
@@ -242,9 +250,6 @@ const toggleSection = (sectionId: string) => {
 		<template v-if='currentPage == "font"'>
 			<Font />
 		</template>
-		<template v-if='currentPage == "layout"'>
-			<Layout />
-		</template>
 		<template v-if='currentPage == "faq"'>
 			<FAQ />
 		</template>
@@ -256,6 +261,15 @@ const toggleSection = (sectionId: string) => {
 		</template>
 		<template v-if='currentPage == "about"'>
 			<About />
+		</template>
+		<template v-if='currentPage == "message"'>
+			<Message />
+		</template>
+		<template v-if='currentPage == "call"'>
+			<Call />
+		</template>
+		<template v-if='currentPage == "system"'>
+			<System />
 		</template>
 	</div>
 </template>

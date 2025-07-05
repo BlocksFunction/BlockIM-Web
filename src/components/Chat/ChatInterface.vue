@@ -13,6 +13,7 @@ import {
 	User,
 	Video,
 } from "lucide-vue-next";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const chatState = useChatState();
 
@@ -28,6 +29,7 @@ const notice = [
 		content: "你猜说了什么",
 	},
 ];
+const customColor = useCustomColor();
 </script>
 
 <template>
@@ -123,10 +125,30 @@ const notice = [
 						<input
 							type="text"
 							placeholder="说些什么..."
-							class="flex-1 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:text-white"
+							class="flex-1 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-1 dark:text-white"
+							:class="
+								[
+									customColor
+										.getCurrentColorClass
+										.focusBorder,
+									customColor
+										.getCurrentColorClass
+										.focusRing,
+								]
+							"
 						/>
 						<button
-							class="cursor-pointer p-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors"
+							class="cursor-pointer p-3 text-white rounded-xl transition-colors"
+							:class="
+								[
+									customColor
+										.getCurrentColorClass
+										.bubbleBg,
+									customColor
+										.getCurrentColorClass
+										.hoverDark,
+								]
+							"
 						>
 							<Send :size="20" />
 						</button>
@@ -147,7 +169,6 @@ const notice = [
 						>
 							公告
 						</h2>
-						<SwitchTheme class="" />
 					</div>
 					<div class="p-2 overflow-y-auto space-y-4">
 						<div

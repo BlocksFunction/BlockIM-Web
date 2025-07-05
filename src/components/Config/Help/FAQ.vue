@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ChevronDown, HelpCircle } from "lucide-vue-next";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const appName = import.meta.env.VITE_APP_NAME;
+const customColor = useCustomColor();
 const faqItems = ref([
 	{
 		id: 1,
@@ -136,7 +138,17 @@ const toggleFAQ = (id: number) => {
 				</p>
 				<div class="flex space-x-3">
 					<button
-						class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+						class="px-4 py-2 text-white rounded-lg transition-colors"
+						:class="
+							[
+								customColor
+									.getCurrentColorClass
+									.bubbleBg,
+								customColor
+									.getCurrentColorClass
+									.hoverDark,
+							]
+						"
 					>
 						意见反馈
 					</button>

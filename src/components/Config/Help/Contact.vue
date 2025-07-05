@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Globe, Mail, MessageCircle, Phone, Users } from "lucide-vue-next";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const contactMethods = [
 	{
@@ -47,6 +48,7 @@ const socialMedia = [
 	},
 ];
 const appName = import.meta.env.VITE_APP_NAME;
+const customColor = useCustomColor();
 </script>
 
 <template>
@@ -126,7 +128,12 @@ const appName = import.meta.env.VITE_APP_NAME;
 						>
 							<component
 								:is="method.icon"
-								class="w-5 h-5 text-blue-500"
+								class="w-5 h-5"
+								:class="
+									customColor
+									.getCurrentColorClass
+									.themeText
+								"
 							/>
 						</div>
 						<div class="flex-1 min-w-0">
@@ -146,7 +153,9 @@ const appName = import.meta.env.VITE_APP_NAME;
 									.description
 								}}
 							</p>
-							<p class="mt-2 font-medium">
+							<p
+								class="mt-2 font-medium text-gray-500 dark:text-gray-400"
+							>
 								{{
 									method
 									.details
@@ -155,7 +164,17 @@ const appName = import.meta.env.VITE_APP_NAME;
 						</div>
 						<a
 							:href="method.action"
-							class="ml-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors whitespace-nowrap"
+							class="ml-4 px-4 py-2 text-white rounded-lg transition-colors whitespace-nowrap"
+							:class="
+								[
+									customColor
+										.getCurrentColorClass
+										.bubbleBg,
+									customColor
+										.getCurrentColorClass
+										.hoverDark,
+								]
+							"
 						>
 							联系
 						</a>

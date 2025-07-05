@@ -2,6 +2,7 @@
 import { useChatState } from "@/stores/useChatState.ts";
 import type { PrivateChat } from "@/stores/useChatState.ts";
 import { UserPlus } from "lucide-vue-next";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const chatState = useChatState();
 
@@ -26,6 +27,8 @@ const openPrivateChat = (friend: (typeof friends)[number]) => {
 
 	chatState.openSession(session);
 };
+
+const customColor = useCustomColor();
 </script>
 
 <template>
@@ -36,7 +39,14 @@ const openPrivateChat = (friend: (typeof friends)[number]) => {
 			<button
 				class="mt-2 w-full flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
 			>
-				<UserPlus :size="18" class="text-blue-500" />
+				<UserPlus
+					:size="18"
+					:class="
+						customColor
+						.getCurrentColorClass
+						.themeText
+					"
+				/>
 				<span class="text-gray-700 dark:text-gray-300"> 加个好友 </span>
 			</button>
 		</div>

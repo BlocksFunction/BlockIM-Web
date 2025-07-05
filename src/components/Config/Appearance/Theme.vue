@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import {
+	Check,
 	Laptop,
 	Monitor,
 	Moon,
 	Palette,
 	Send,
-	Smartphone,
 	Sun,
 } from "lucide-vue-next";
-import useTheme from "@/stores/useTheme.ts";
+import useTheme from "@/stores/useTheme";
+import { useCustomColor } from "@/stores/useCustomColor";
 
 const theme = useTheme();
+const customColor = useCustomColor();
 
 const colorThemes = ref([
 	{ id: "blue", name: "蓝色", class: "bg-blue-500" },
@@ -27,13 +29,6 @@ const themeOptions = ref([
 	{ id: "dark", name: "深色模式", icon: Moon },
 	{ id: "system", name: "跟随系统", icon: Laptop },
 ]);
-
-const selectedTheme = ref(theme.getTheme);
-const selectedColor = ref("blue");
-
-watch(selectedTheme, () => {
-	theme.toggleTheme();
-});
 </script>
 
 <template>
@@ -52,7 +47,13 @@ watch(selectedTheme, () => {
 				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
 			>
 				<div class="flex items-start mb-6">
-					<Palette class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<Palette
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -71,12 +72,22 @@ watch(selectedTheme, () => {
 					<button
 						v-for="option in themeOptions"
 						:key="option.id"
-						@click="selectedTheme = option.id"
+						@click="theme.setTheme(option.id as any)"
 						class="p-4 border rounded-xl transition-all"
 						:class='
 							[
-								selectedTheme === option.id
-									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+								theme.getTheme === option.id
+									? [
+										customColor
+											.getCurrentColorClass
+											.themeBorder,
+										customColor
+											.getCurrentColorClass
+											.themeBgLight,
+										customColor
+											.getCurrentColorClass
+											.themeBgDark,
+									]
 									: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
 							]
 						'
@@ -86,18 +97,24 @@ watch(selectedTheme, () => {
 								:is="option.icon"
 								class="w-8 h-8 mb-3"
 								:class='
-									selectedTheme ===
+									theme
+										.getTheme ===
 										option.id
-									? "text-blue-500"
+									? customColor
+										.getCurrentColorClass
+										.themeIconText
 									: "text-gray-400 dark:text-gray-500"
 								'
 							/>
 							<span
 								class="font-medium"
 								:class='
-									selectedTheme ===
+									theme
+										.getTheme ===
 										option.id
-									? "text-blue-500"
+									? customColor
+										.getCurrentColorClass
+										.themeText
 									: "text-gray-700 dark:text-gray-300"
 								'
 							>
@@ -115,7 +132,13 @@ watch(selectedTheme, () => {
 				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
 			>
 				<div class="flex items-start mb-6">
-					<Palette class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<Palette
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -136,26 +159,40 @@ watch(selectedTheme, () => {
 					<button
 						v-for="color in colorThemes"
 						:key="color.id"
-						@click="selectedColor = color.id"
+						@click="
+							customColor.setSelectedColor(
+								color.id as any,
+							)
+						"
 						class="group"
 					>
-						<div class="flex flex-col items-center">
+						<span class="flex flex-col items-center">
 							<div
 								class="w-12 h-12 rounded-full flex items-center justify-center mb-2"
 								:class='
 									[
 										color.class,
-										selectedColor ===
+										customColor
+												.selectedColor
+												.cookie ===
 												color
 													.id
-											? "ring-2 ring-offset-2 ring-blue-500"
+											? [
+												"ring-2",
+												"ring-offset-2",
+												customColor
+													.getCurrentColorClass
+													.colorButtonRing,
+											]
 											: "",
 									]
 								'
 							>
 								<Check
 									v-if="
-										selectedColor ===
+										customColor
+										.selectedColor
+										.cookie ===
 										color
 											.id
 									"
@@ -165,9 +202,11 @@ watch(selectedTheme, () => {
 							<span
 								class="text-sm"
 								:class='
-									selectedColor ===
+									customColor
+										.selectedColor
+										.cookie ===
 										color.id
-									? "text-blue-500 font-medium"
+									? `${customColor.getCurrentColorClass.themeText} font-medium`
 									: "text-gray-700 dark:text-gray-300"
 								'
 							>
@@ -176,14 +215,20 @@ watch(selectedTheme, () => {
 									.name
 								}}
 							</span>
-						</div>
+						</span>
 					</button>
 				</div>
 			</div>
 
 			<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 				<div class="flex items-start mb-6">
-					<Monitor class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<Monitor
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -223,31 +268,45 @@ watch(selectedTheme, () => {
 							</div>
 							<div class="p-4">
 								<div class="flex items-center mb-4">
-									<div
-										class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-3"
-									>
-										<span
-											class="text-gray-600 dark:text-gray-300 font-medium"
-										>J</span>
-									</div>
-									<div>
+									<div class="relative">
 										<div
-											class="font-medium text-gray-900 dark:text-white"
+											class="w-10 h-10 bg-blue-100 dark:bg-gray-700 rounded-full flex items-center justify-center"
 										>
-											张三
+											<span
+												class="text-gray-600 dark:text-gray-300"
+											>
+												IA
+											</span>
 										</div>
 										<div
-											class="text-xs text-gray-500 dark:text-gray-400"
+											class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"
+										/>
+									</div>
+									<div class="ml-3">
+										<p
+											class="font-medium text-gray-700 dark:text-gray-200"
+										>
+											ImAur
+										</p>
+										<p
+											class="text-sm text-gray-500 dark:text-gray-400"
 										>
 											在线
-										</div>
+										</p>
 									</div>
 								</div>
 
 								<div class="space-y-3">
 									<div class="flex justify-end">
 										<div
-											class="bg-blue-500 text-white rounded-xl rounded-br-none px-4 py-2 max-w-xs"
+											:class='
+												[
+													customColor
+														.getCurrentColorClass
+														.bubbleBg,
+													"text-white rounded-xl rounded-br-none px-4 py-2 max-w-xs",
+												]
+											'
 										>
 											你好，最近怎么样？
 										</div>
@@ -255,7 +314,7 @@ watch(selectedTheme, () => {
 
 									<div class="flex">
 										<div
-											class="bg-gray-200 dark:bg-gray-700 rounded-xl rounded-bl-none px-4 py-2 max-w-xs"
+											class="bg-gray-200 dark:bg-gray-700 rounded-xl rounded-bl-none px-4 py-2 max-w-xs dark:text-white"
 										>
 											我很好，谢谢！
 										</div>
@@ -268,10 +327,17 @@ watch(selectedTheme, () => {
 									<input
 										type="text"
 										placeholder="输入消息..."
-										class="flex-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none"
-									>
+										class="flex-1 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none dark:text-gray-300"
+									/>
 									<button
-										class="ml-2 p-2 bg-blue-500 text-white rounded-lg"
+										:class='
+											[
+												customColor
+													.getCurrentColorClass
+													.bubbleBg,
+												"ml-2 p-2 text-white rounded-lg",
+											]
+										'
 									>
 										<Send class="w-5 h-5" />
 									</button>
@@ -312,13 +378,13 @@ watch(selectedTheme, () => {
 										>
 											<span
 												class="text-xs text-gray-600 dark:text-gray-300"
-											>A</span>
+											>UN</span>
 										</div>
 										<div>
 											<div
 												class="text-sm font-medium text-gray-900 dark:text-white"
 											>
-												张三
+												UNK
 											</div>
 											<div
 												class="text-xs text-gray-500 dark:text-gray-400"
@@ -329,24 +395,44 @@ watch(selectedTheme, () => {
 									</div>
 
 									<div
-										class="flex items-center p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30"
+										:class='
+											[
+												"flex items-center p-2 rounded-lg",
+												customColor
+													.getCurrentColorClass
+													.mobileBgLight,
+												customColor
+													.getCurrentColorClass
+													.mobileBgDark,
+											]
+										'
 									>
 										<div
-											class="w-8 h-8 bg-blue-300 dark:bg-blue-700 rounded-full flex items-center justify-center mr-2"
+											:class='
+												[
+													"w-8 h-8 rounded-full flex items-center justify-center mr-2",
+													customColor
+														.getCurrentColorClass
+														.mobileAvatarBg,
+													customColor
+														.getCurrentColorClass
+														.mobileAvatarBgDark,
+												]
+											'
 										>
 											<span class="text-xs text-white"
-											>李</span>
+											>IA</span>
 										</div>
 										<div>
 											<div
 												class="text-sm font-medium text-gray-900 dark:text-white"
 											>
-												李四
+												ImAur
 											</div>
 											<div
 												class="text-xs text-gray-500 dark:text-gray-400"
 											>
-												最近怎么样？
+												我不好，不谢！
 											</div>
 										</div>
 									</div>

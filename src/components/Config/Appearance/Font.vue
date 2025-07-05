@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Minus, Plus, TextCursorInput, Type } from "lucide-vue-next";
+import { useCustomColor } from "@/stores/useCustomColor.ts";
 
 const fontSizes = ref([
 	{ id: "xs", name: "较小", size: "text-xs" },
@@ -20,6 +21,7 @@ const selectedFontSize = ref("base");
 const selectedFontFamily = ref("sans");
 const lineHeight = ref(1.5);
 const letterSpacing = ref(0);
+const customColor = useCustomColor();
 
 const increaseFontSize = () => {
 	const currentIndex = fontSizes.value.findIndex((f) =>
@@ -56,7 +58,13 @@ const decreaseFontSize = () => {
 				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
 			>
 				<div class="flex items-start mb-6">
-					<Type class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<Type
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -124,7 +132,17 @@ const decreaseFontSize = () => {
 						:class='
 							[
 								selectedFontSize === size.id
-									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+									? [
+										customColor
+											.getCurrentColorClass
+											.themeBorder,
+										customColor
+											.getCurrentColorClass
+											.themeBgLight,
+										customColor
+											.getCurrentColorClass
+											.themeBgDark,
+									]
 									: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
 								size.size,
 							]
@@ -158,7 +176,12 @@ const decreaseFontSize = () => {
 								:class='
 									selectedFontSize ===
 										size.id
-									? "bg-blue-500 text-white"
+									? [
+										"text-white",
+										customColor
+											.getCurrentColorClass
+											.bubbleBg,
+									]
 									: "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
 								'
 							>
@@ -173,7 +196,13 @@ const decreaseFontSize = () => {
 				class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6"
 			>
 				<div class="flex items-start mb-6">
-					<Type class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<Type
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
@@ -197,13 +226,23 @@ const decreaseFontSize = () => {
 						:class='
 							[
 								selectedFontFamily === font.id
-									? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+									? [
+										customColor
+											.getCurrentColorClass
+											.themeBorder,
+										customColor
+											.getCurrentColorClass
+											.themeBgLight,
+										customColor
+											.getCurrentColorClass
+											.themeBgDark,
+									]
 									: "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700",
 							]
 						'
 					>
-						<div class="flex flex-col items-center">
-							<div
+						<span class="flex flex-col items-center">
+							<span
 								class="text-3xl mb-3"
 								:class="font.class"
 							>
@@ -211,13 +250,15 @@ const decreaseFontSize = () => {
 									font
 									.preview
 								}}
-							</div>
+							</span>
 							<span
 								class="font-medium"
 								:class='
 									selectedFontFamily ===
 										font.id
-									? "text-blue-500"
+									? customColor
+										.getCurrentColorClass
+										.themeText
 									: "text-gray-700 dark:text-gray-300"
 								'
 							>
@@ -226,7 +267,7 @@ const decreaseFontSize = () => {
 									.name
 								}}
 							</span>
-							<div
+							<span
 								class="mt-3 text-sm text-center"
 								:class="font.class"
 							>
@@ -234,15 +275,21 @@ const decreaseFontSize = () => {
 									font
 									.name
 								}} 的预览文本
-							</div>
-						</div>
+							</span>
+						</span>
 					</button>
 				</div>
 			</div>
 
 			<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
 				<div class="flex items-start mb-6">
-					<TextCursorInput class="w-6 h-6 text-blue-500 mt-1 mr-3" />
+					<TextCursorInput
+						class="w-6 h-6 mt-1 mr-3"
+						:class="
+							customColor.getCurrentColorClass
+							.themeText
+						"
+					/>
 					<div class="flex-1">
 						<h2
 							class="text-lg font-semibold text-gray-900 dark:text-white"
